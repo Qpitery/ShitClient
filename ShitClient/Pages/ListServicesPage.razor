@@ -1,0 +1,37 @@
+﻿@page "/ListServicesPage"
+@using ShitAPI.DB;
+@inject HttpClient httpclient;
+<h3>Услуги</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Имя</th>
+            <th>Стоимость</th>
+            <th>Код услуги</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Service serv in ListService)
+        {
+            <tr>
+                <td>@serv.Id</td>
+                <td>@serv.Name</td>
+                <td>@serv.Cost</td>
+                <td>@serv.CodeService</td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+@code {
+    public List<Service> ListService = new();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        ListService = await httpclient.GetFromJsonAsync<List<Service>>("Services/GetServices");
+        await base.OnInitializedAsync();
+    }
+    
+}
